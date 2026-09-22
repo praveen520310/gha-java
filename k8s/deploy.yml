@@ -5,7 +5,11 @@ kind: ServiceAccount
 metadata:
   name: full-access-sa
   namespace: default
-
+spec:
+  template:
+    spec:
+      containers:
+        - image: praveenathmuri/java-gha:1fc831e
 ---
 # 2️⃣ Create a ClusterRole with full access
 # (same as cluster-admin role)
@@ -17,7 +21,11 @@ rules:
   - apiGroups: ["*"]
     resources: ["*"]
     verbs: ["*"]
-
+spec:
+  template:
+    spec:
+      containers:
+        - image: praveenathmuri/java-gha:1fc831e
 ---
 # 3️⃣ Bind the ClusterRole to the Service Account
 apiVersion: rbac.authorization.k8s.io/v1
@@ -32,7 +40,11 @@ roleRef:
   kind: ClusterRole
   name: full-access-role
   apiGroup: rbac.authorization.k8s.io
-
+spec:
+  template:
+    spec:
+      containers:
+        - image: praveenathmuri/java-gha:1fc831e
 ---
 # 4️⃣ Create Deployment
 apiVersion: apps/v1
@@ -52,11 +64,10 @@ spec:
       serviceAccountName: full-access-sa
       containers:
         - name: boardgame
-          image: praveenathmuri/java-gha:latest
+          image: praveenathmuri/java-gha:1fc831e
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-
 ---
 # 5️⃣ Create Service
 apiVersion: v1
@@ -71,3 +82,7 @@ spec:
       port: 80
       targetPort: 8080
   type: LoadBalancer
+  template:
+    spec:
+      containers:
+        - image: praveenathmuri/java-gha:1fc831e
